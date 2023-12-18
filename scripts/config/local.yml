@@ -1,0 +1,4 @@
+server:
+  port: 8080
+postgres:
+  url: postgres://postgres:postgres@localhost:5432/accountapi?sslmode=disable
