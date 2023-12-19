@@ -14,7 +14,7 @@ import (
 )
 
 func SetAccountRoutes(ctx context.Context, config config.Configuration, r *gin.Engine, s ports.AccountService) {
-	r.POST("/account/:id", updateAccount(ctx, config, s))
+	r.PUT("/account", updateAccount(ctx, config, s))
 	r.POST("/account", createAccount(ctx, config, s))
 }
 
@@ -44,6 +44,24 @@ func createAccount(ctx context.Context, cfg config.Configuration, s ports.Accoun
 
 func updateAccount(ctx context.Context, cfg config.Configuration, s ports.AccountService) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		fmt.Println("UPDATE ACCOUNT")
+		var account models.Account
+
+		if err := c.ShouldBindJSON(&account); err != nil {
+			logger.Error(logger.HTTPError, "cannot marshal body")
+			return
+		}
+
+		if err := s.UpdateAccount(ctx, account); err != nil {
+			logger.Error(logger.HTTPError, "Error creating account")
+			c.JSON(http.StatusUnprocessableEntity, map[string]string{
+				"error":  "failed update account",
+				"reason": err.Error(),
+			})
+			return
+		}
+
+		logger.Info(logger.ServerInfo, fmt.Sprintf("Account Updated %v", account))
+
+		c.JSON(http.StatusOK, map[string]string{"success": "updated"})
 	}
 }
