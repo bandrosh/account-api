@@ -14,7 +14,6 @@ type accountRepository struct {
 	postgres.PostgresRepository
 }
 
-// Create implements ports.AccountRepository.
 func (a *accountRepository) Create(ctx context.Context, entity models.Account) (string, error) {
 	q := `
 	INSERT INTO accounts (id, name, created_on)
@@ -35,23 +34,8 @@ func (a *accountRepository) Create(ctx context.Context, entity models.Account) (
 	return acc.Id, nil
 }
 
-// Delete implements ports.AccountRepository.
-func (a *accountRepository) Delete(ctx context.Context, ID string) error {
-	panic("unimplemented")
-}
-
-// Get implements ports.AccountRepository.
-func (a *accountRepository) Get(ctx context.Context, filter map[string]interface{}, skip *int, take *int) ([]interface{}, error) {
-	panic("unimplemented")
-}
-
-// GetByID implements ports.AccountRepository.
-func (a *accountRepository) GetByID(ctx context.Context, ID string) (interface{}, error) {
-	panic("unimplemented")
-}
-
 // Update implements ports.AccountRepository.
-func (a *accountRepository) Update(ctx context.Context, ID string, entity interface{}) error {
+func (*accountRepository) Update(ctx context.Context, entity models.Account) (string, error) {
 	panic("unimplemented")
 }
 

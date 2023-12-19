@@ -9,7 +9,6 @@ import (
 
 	"github.com/account-api/config"
 	"github.com/account-api/infrastructure/logger"
-	"github.com/account-api/infrastructure/postgres"
 	"github.com/account-api/internal/adapter/http/handlers"
 	"github.com/account-api/internal/adapter/http/middlewares"
 	"github.com/account-api/internal/adapter/repository"
@@ -29,12 +28,12 @@ type svs struct {
 func New(ctx context.Context, cfg config.Configuration) (a api) {
 	a.config = cfg
 
-	pgql, err := postgres.ConnectPostgresDB(ctx, a.config.Postgres.Url)
-	if err != nil {
-		logger.Fatal(logger.ConfigError, fmt.Sprintf("Cannot connect postgresql error: %v", err))
-	}
+	// pgql, err := postgres.ConnectPostgresDB(ctx, a.config.Postgres.Url)
+	// if err != nil {
+	// 	logger.Fatal(logger.ConfigError, fmt.Sprintf("Cannot connect postgresql error: %v", err))
+	// }
 
-	accountRepository := repository.NewAccountRepository(pgql)
+	accountRepository := repository.NewAccountMockRepository()
 	a.services.account = services.NewAccountService(a.config, accountRepository)
 	return a
 }

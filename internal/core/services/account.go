@@ -25,7 +25,13 @@ func (a *AccountService) CreateAccount(ctx context.Context, account models.Accou
 	return nil
 }
 
-func (a *AccountService) UpdateAccount(context.Context, string, models.Account) error {
+func (a *AccountService) UpdateAccount(ctx context.Context, account models.Account) error {
+	_, err := a.accountRepository.Update(ctx, account)
+	if err != nil {
+		logger.Error(logger.HTTPError, fmt.Sprintf("cannot update account error: %v", err.Error()))
+		return err
+	}
+
 	return nil
 }
 
