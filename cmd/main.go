@@ -11,7 +11,7 @@ import (
 )
 
 func main() {
-	cfg, err := config.LoadAppConfig("../scripts/config")
+	cfg, err := config.LoadAppConfig("./scripts/config")
 	if err != nil {
 		logger.Fatal(logger.FatalError, "unable to load configurations")
 	}

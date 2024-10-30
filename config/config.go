@@ -1,6 +1,7 @@
 package config
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/spf13/viper"
@@ -30,7 +31,8 @@ func LoadAppConfig(path string) (Configuration, error) {
 	viper.AutomaticEnv()
 
 	if err := viper.ReadInConfig(); err != nil {
-		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
+		var configFileNotFoundError viper.ConfigFileNotFoundError
+		if errors.As(err, &configFileNotFoundError) {
 			return Configuration{}, fmt.Errorf("config file not found: %s", path)
 		}
 		return Configuration{}, fmt.Errorf("failed to read config file: %w", err)
